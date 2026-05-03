@@ -7,7 +7,6 @@ import '../../core/inference_manager.dart';
 import '../../providers/detection_provider.dart';
 import '../../providers/settings_provider.dart';
 import '../../services/cloud_detection_service.dart';
-import '../../services/firebase_service.dart';
 import '../../services/local_detection_service.dart';
 import '../../services/network_monitor.dart';
 import '../history/history_screen.dart';
@@ -26,8 +25,6 @@ class _CameraScreenState extends State<CameraScreen> with WidgetsBindingObserver
   List<CameraDescription> _cameras = [];
   bool _cameraInitialized = false;
   InferenceManager? _inferenceManager;
-  // ignore: unused_field
-  final _firebaseService = FirebaseService();
 
   int _frameCount = 0;
   double _fps = 0;

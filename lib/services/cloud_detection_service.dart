@@ -11,8 +11,7 @@ import '../models/detection_result.dart';
 
 class CloudDetectionService {
   final AppSettings settings;
-  // ignore: unused_field
-  static const _uuid = Uuid();
+  static final _uuid = const Uuid();
 
   CloudDetectionService({required this.settings});
 

@@ -56,7 +56,9 @@ class InferenceManager extends ChangeNotifier {
         _isProcessing = false;
         return;
       }
-      await _runInference(entry.data, width: width, height: height);
+      await _runInference(entry.data,
+          width: (entry.metadata['width'] as int?) ?? width,
+          height: (entry.metadata['height'] as int?) ?? height);
     } finally {
       _isProcessing = false;
     }

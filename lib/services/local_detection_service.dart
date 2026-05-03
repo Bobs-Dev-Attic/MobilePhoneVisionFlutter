@@ -8,7 +8,7 @@ import '../models/app_settings.dart';
 class LocalDetectionService {
   final LocalModel model;
   bool _initialized = false;
-  static const _uuid = Uuid();
+  static final _uuid = const Uuid();
 
   LocalDetectionService({this.model = LocalModel.yolov8Tiny});
 
