@@ -4,14 +4,12 @@ import 'dart:ui';
 import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
 import 'package:image/image.dart' as img;
-import 'package:uuid/uuid.dart';
 import '../models/app_settings.dart';
 import '../models/cloud_response.dart';
 import '../models/detection_result.dart';
 
 class CloudDetectionService {
   final AppSettings settings;
-  static final _uuid = const Uuid();
 
   CloudDetectionService({required this.settings});
 
