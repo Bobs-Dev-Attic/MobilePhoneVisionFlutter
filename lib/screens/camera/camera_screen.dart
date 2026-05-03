@@ -30,6 +30,7 @@ class _CameraScreenState extends State<CameraScreen> with WidgetsBindingObserver
   double _fps = 0;
   DateTime _lastFpsUpdate = DateTime.now();
   bool _fallbackShown = false;
+  bool _isStartingStream = false;
 
   @override
   void initState() {
@@ -49,8 +50,11 @@ class _CameraScreenState extends State<CameraScreen> with WidgetsBindingObserver
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
     if (_cameraController == null || !_cameraController!.value.isInitialized) return;
-    if (state == AppLifecycleState.inactive) {
+    if (state == AppLifecycleState.inactive || state == AppLifecycleState.paused) {
+      _cameraController?.stopImageStream();
       _cameraController?.dispose();
+      _cameraController = null;
+      _cameraInitialized = false;
     } else if (state == AppLifecycleState.resumed) {
       _initCamera(_cameras.isNotEmpty ? _cameras.first : null);
     }
@@ -77,7 +81,8 @@ class _CameraScreenState extends State<CameraScreen> with WidgetsBindingObserver
   }
 
   Future<void> _initCamera(CameraDescription? camera) async {
-    if (camera == null) return;
+    if (camera == null || _isStartingStream) return;
+    _isStartingStream = true;
     _cameraController = CameraController(
       camera,
       ResolutionPreset.medium,
@@ -91,6 +96,8 @@ class _CameraScreenState extends State<CameraScreen> with WidgetsBindingObserver
       _cameraController!.startImageStream(_onCameraFrame);
     } catch (e) {
       debugPrint('[CameraScreen] Camera controller error: $e');
+    } finally {
+      _isStartingStream = false;
     }
   }
 

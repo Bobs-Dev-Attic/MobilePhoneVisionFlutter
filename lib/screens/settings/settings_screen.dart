@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+
 import 'package:provider/provider.dart';
 import '../../models/app_settings.dart';
 import '../../providers/settings_provider.dart';
@@ -36,6 +37,12 @@ class _SettingsScreenState extends State<SettingsScreen> {
   }
 
   Future<void> _save() async {
+    final url = _customUrlController.text.trim();
+    final parsed = url.isEmpty ? null : Uri.tryParse(url);
+    if (url.isNotEmpty && (parsed == null || parsed.scheme != 'https' || !parsed.hasAuthority)) {
+      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Custom endpoint must be a valid https URL')));
+      return;
+    }
     final updated = _draft.copyWith(
       openaiApiKey: _openaiController.text.trim(),
       anthropicApiKey: _anthropicController.text.trim(),
@@ -117,6 +124,12 @@ class _SettingsScreenState extends State<SettingsScreen> {
           const _SectionHeader('Detailed Analysis Whitelist'),
           _buildWhitelistEditor(),
           const SizedBox(height: 16),
+          SwitchListTile(
+            title: const Text('Allow cloud upload for ROI analysis', style: TextStyle(color: Colors.white)),
+            value: _draft.cloudUploadConsentGranted,
+            activeColor: Colors.cyanAccent,
+            onChanged: (v) => setState(() => _draft = _draft.copyWith(cloudUploadConsentGranted: v)),
+          ),
           const _SectionHeader('Storage'),
           SwitchListTile(
             title: const Text('Save crops to Firebase Storage',

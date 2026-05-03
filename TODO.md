@@ -1,18 +1,18 @@
 # TODO (Prioritized)
 
 ## P0 — Must Do Before Production
-- [ ] Fix `README.md` corruption and provide accurate setup/run/security notes.
-- [ ] Rework `InferenceManager.processFrame` into a proper worker loop that drains queue and processes latest frame deterministically.
-- [ ] Store API keys in secure storage (`flutter_secure_storage`) instead of SharedPreferences.
-- [ ] Add certificate pinning and strict HTTP timeout/retry policy for cloud requests.
-- [ ] Enforce `targetFps` throttling in pipeline (not just settings UI).
-- [ ] Add explicit consent gate before any cloud image upload.
-- [ ] Validate and constrain custom endpoint URL (https only, allowlist/domain rules).
+- [x] Fix `README.md` corruption and provide accurate setup/run/security notes.
+- [x] Rework `InferenceManager.processFrame` into a proper worker loop that drains queue and processes latest frame deterministically.
+- [x] Store API keys in secure storage (`flutter_secure_storage`) instead of SharedPreferences.
+- [x] Add certificate pinning and strict HTTP timeout/retry policy for cloud requests.
+- [x] Enforce `targetFps` throttling in pipeline (not just settings UI).
+- [x] Add explicit consent gate before any cloud image upload.
+- [x] Validate and constrain custom endpoint URL (https only, allowlist/domain rules).
 
 ## P1 — High Value / Near-Term
-- [ ] Replace regex JSON extraction from LLM responses with strict schema response handling and parser validation.
-- [ ] Add debounce/cooldown for repeated cloud ROI calls per tracked object.
-- [ ] Add robust camera lifecycle recovery and stream restart guards.
+- [x] Replace regex JSON extraction from LLM responses with strict schema response handling and parser validation.
+- [x] Add debounce/cooldown for repeated cloud ROI calls per tracked object.
+- [x] Add robust camera lifecycle recovery and stream restart guards.
 - [ ] Add Firebase security rules documentation and automated checks.
 - [ ] Add delete/export user data controls and retention settings in app.
 - [ ] Add structured error taxonomy and user-friendly error surfaces.
