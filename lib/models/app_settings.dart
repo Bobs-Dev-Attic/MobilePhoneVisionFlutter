@@ -14,6 +14,7 @@ class AppSettings {
   final String customEndpointUrl;
   final List<String> detailedAnalysisWhitelist;
   final bool saveToStorage;
+  final bool cloudUploadConsentGranted;
 
   const AppSettings({
     this.inferenceMode = InferenceMode.hybrid,
@@ -27,6 +28,7 @@ class AppSettings {
     this.customEndpointUrl = '',
     this.detailedAnalysisWhitelist = const ['cell phone', 'laptop', 'car', 'person'],
     this.saveToStorage = false,
+    this.cloudUploadConsentGranted = false,
   });
 
   AppSettings copyWith({
@@ -41,6 +43,7 @@ class AppSettings {
     String? customEndpointUrl,
     List<String>? detailedAnalysisWhitelist,
     bool? saveToStorage,
+    bool? cloudUploadConsentGranted,
   }) {
     return AppSettings(
       inferenceMode: inferenceMode ?? this.inferenceMode,
@@ -54,6 +57,7 @@ class AppSettings {
       customEndpointUrl: customEndpointUrl ?? this.customEndpointUrl,
       detailedAnalysisWhitelist: detailedAnalysisWhitelist ?? this.detailedAnalysisWhitelist,
       saveToStorage: saveToStorage ?? this.saveToStorage,
+      cloudUploadConsentGranted: cloudUploadConsentGranted ?? this.cloudUploadConsentGranted,
     );
   }
 
@@ -69,6 +73,7 @@ class AppSettings {
     'customEndpointUrl': customEndpointUrl,
     'detailedAnalysisWhitelist': detailedAnalysisWhitelist,
     'saveToStorage': saveToStorage,
+    'cloudUploadConsentGranted': cloudUploadConsentGranted,
   };
 
   factory AppSettings.fromJson(Map<String, dynamic> json) => AppSettings(
@@ -84,5 +89,6 @@ class AppSettings {
     detailedAnalysisWhitelist: (json['detailedAnalysisWhitelist'] as List<dynamic>?)
         ?.cast<String>() ?? const ['cell phone', 'laptop', 'car', 'person'],
     saveToStorage: json['saveToStorage'] as bool? ?? false,
+    cloudUploadConsentGranted: json['cloudUploadConsentGranted'] as bool? ?? false,
   );
 }
