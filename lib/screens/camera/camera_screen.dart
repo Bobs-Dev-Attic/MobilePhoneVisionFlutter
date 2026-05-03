@@ -115,10 +115,8 @@ class _CameraScreenState extends State<CameraScreen> with WidgetsBindingObserver
   }
 
   Uint8List _convertCameraImage(CameraImage image) {
-    if (image.format.group == ImageFormatGroup.jpeg) {
-      return image.planes[0].bytes;
-    }
-    // For YUV420 or other formats, return the first plane as fallback
+    // ImageFormatGroup.jpeg is set in CameraController; the first plane contains
+    // the full JPEG bytes. YUV420 handling below is a defensive fallback only.
     return image.planes[0].bytes;
   }
 

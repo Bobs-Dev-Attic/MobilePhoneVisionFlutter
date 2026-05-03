@@ -54,6 +54,9 @@ class _FakeNetworkMonitor extends NetworkMonitor {
 }
 
 void main() {
+  // Ping exceeding the 500ms cloud-fallback threshold
+  const int kSlowPing = 9999;
+
   group('InferenceManager', () {
     test('initial state is idle', () {
       final manager = InferenceManager(
@@ -104,7 +107,7 @@ void main() {
         ),
         localService: _FakeLocalService([detection]),
         cloudService: _FakeCloudService(),
-        networkMonitor: _FakeNetworkMonitor(ping: 9999),
+        networkMonitor: _FakeNetworkMonitor(ping: kSlowPing),
       );
 
       await manager.processFrame(

@@ -11,6 +11,9 @@ import 'temporal_tracker.dart';
 
 enum InferenceState { idle, localInference, cloudInference, fallback }
 
+/// Sentinel value used as trackId when no track has been matched.
+const int kNoTrackId = -1;
+
 class InferenceManager extends ChangeNotifier {
   final LocalDetectionService _localService;
   final CloudDetectionService _cloudService;
@@ -158,7 +161,7 @@ class InferenceManager extends ChangeNotifier {
   ) {
     return detections.map((det) {
       final match = _tracker.findBestMatch(det.boundingBox);
-      return det.copyWith(trackId: match?.trackId ?? -1);
+      return det.copyWith(trackId: match?.trackId ?? kNoTrackId);
     }).toList();
   }
 
