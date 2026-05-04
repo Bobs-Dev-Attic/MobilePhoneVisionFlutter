@@ -20,12 +20,12 @@
 ## P2 — Optimization / Architecture
 - [ ] Reduce memory churn in image conversion/cropping/base64 path.
 - [ ] Benchmark isolate crop overhead; consider pooled workers/native path.
-- [ ] Introduce telemetry for FPS, dropped frames, cloud latency, and fallback events.
+- [x] Introduce telemetry for FPS, dropped frames, cloud latency, and fallback events.
 - [ ] Add integration tests for offline fallback and cloud timeout behavior.
 - [ ] Add accessibility pass (semantics, dynamic type, color contrast, touch targets).
 
 ## P3 — Strategic Enhancements
 - [ ] Evaluate MediaPipe/TFLite delegate options for better on-device throughput.
 - [ ] Add remote config / feature flags for rollout safety.
-- [ ] Add threat model document (STRIDE + LINDDUN) and annual review cadence.
-- [ ] Establish secure SDLC checklist (SAST, dependency audit, secrets scan in CI).
+- [x] Add threat model document (STRIDE + LINDDUN) and annual review cadence.
+- [x] Establish secure SDLC checklist (SAST, dependency audit, secrets scan in CI).

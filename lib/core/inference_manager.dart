@@ -8,6 +8,8 @@ import '../services/cloud_detection_service.dart';
 import '../services/network_monitor.dart';
 import 'frame_buffer.dart';
 import 'temporal_tracker.dart';
+import 'telemetry_tracker.dart';
+import '../models/telemetry_snapshot.dart';
 
 enum InferenceState { idle, localInference, cloudInference, fallback }
 const int kNoTrackId = -1;
@@ -18,6 +20,7 @@ class InferenceManager extends ChangeNotifier {
   final NetworkMonitor _networkMonitor;
   final TemporalTracker _tracker = TemporalTracker();
   final FrameBuffer _frameBuffer = FrameBuffer();
+  final TelemetryTracker _telemetry = TelemetryTracker();
 
   AppSettings _settings;
   InferenceState _state = InferenceState.idle;
@@ -38,6 +41,7 @@ class InferenceManager extends ChangeNotifier {
   bool get isCloudFallback => _cloudFallback;
   int get droppedFrames => _frameBuffer.droppedFrames;
   AppSettings get settings => _settings;
+  TelemetrySnapshot get telemetry => _telemetry.snapshot(droppedFrames: _frameBuffer.droppedFrames);
 
   void updateSettings(AppSettings newSettings) {
     _settings = newSettings;
@@ -56,6 +60,7 @@ class InferenceManager extends ChangeNotifier {
         if (entry == null) break;
         _lastFrameProcessedAt = DateTime.now();
         await _runInference(entry.data, width: (entry.metadata['width'] as int?) ?? width, height: (entry.metadata['height'] as int?) ?? height);
+        _telemetry.recordProcessedFrame();
       }
     } finally {
       _isProcessing = false;
@@ -98,8 +103,11 @@ class InferenceManager extends ChangeNotifier {
     if (!await _networkMonitor.isConnected()) { _activateFallback(); return; }
     final ping = await _networkMonitor.measurePing();
     if (ping > 500) { _activateFallback(); return; }
+    _telemetry.recordCloudAttempt();
     try {
+      final started = DateTime.now();
       final response = await _cloudService.analyzeRoi(frameData, det.boundingBox, label: det.label);
+      _telemetry.recordCloudSuccess(DateTime.now().difference(started));
       final matchedTrack = _tracker.findBestMatch(det.boundingBox);
       if (matchedTrack != null) {
         final idx = _currentDetections.indexWhere((d) => d.trackId == matchedTrack.trackId);
@@ -114,10 +122,10 @@ class InferenceManager extends ChangeNotifier {
     }
   }
 
-  void _activateFallback() { if (!_cloudFallback) { _cloudFallback = true; _state = InferenceState.fallback; notifyListeners(); } }
+  void _activateFallback() { if (!_cloudFallback) { _cloudFallback = true; _state = InferenceState.fallback; _telemetry.recordFallbackEvent(); notifyListeners(); } }
   void deactivateFallback() { _cloudFallback = false; notifyListeners(); }
   List<DetectionResult> _mergeWithTracked(List<DetectionResult> detections, List<TrackedObject> tracked) => detections.map((det) { final match = _tracker.findBestMatch(det.boundingBox); return det.copyWith(trackId: match?.trackId ?? kNoTrackId); }).toList();
-  void reset() { _tracker.reset(); _frameBuffer.clear(); _currentDetections = []; _cloudFallback = false; _state = InferenceState.idle; _roiCooldownByTrack.clear(); notifyListeners(); }
+  void reset() { _tracker.reset(); _frameBuffer.clear(); _currentDetections = []; _cloudFallback = false; _state = InferenceState.idle; _roiCooldownByTrack.clear(); _telemetry.reset(); notifyListeners(); }
   @override
   void dispose() { _localService.dispose(); super.dispose(); }
 }

@@ -30,4 +30,9 @@ Prototype only. **Not production-ready**.
 - `flutter test`
 
 ## Remaining Work
-See `TODO.md` for P1/P2/P3 follow-up items and `RUNNING_LOG.md` for completed changes in this pass.
+See `TODO.md` for remaining follow-up items and `RUNNING_LOG.md` for completed changes in this pass.
+## P2/P3 Updates (Latest Pass)
+- Added telemetry plumbing in inference flow for FPS, dropped frames, fallback events, and average cloud ROI latency.
+- Added `docs/THREAT_MODEL.md` with STRIDE + LINDDUN analysis and annual review cadence.
+- Added `docs/SECURE_SDLC_CHECKLIST.md` to standardize secure delivery checks.
+
